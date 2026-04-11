@@ -15,7 +15,7 @@ loadOml2d({
   models: [
     // 在这里进行配置
     {
-      path: 'https://model.oml2d.com/Senko_Normals/senko.model3.json',
+      path: 'https://model.hacxy.cn/Senko_Normals/senko.model3.json',
       position: [-10, 20]
     }
   ]

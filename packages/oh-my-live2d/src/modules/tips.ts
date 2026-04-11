@@ -24,6 +24,7 @@ export class Tips {
   private style: CSSProperties = {};
   private priority = 0; // 当前优先级
   private contentStyle: CSSProperties = {};
+  private enabled = true;
   private _tipsOptions: DefaultTipsOptions = DEFAULT_OPTIONS.tips;
   constructor(
     private options: DefaultOptions,
@@ -127,6 +128,9 @@ export class Tips {
   }
 
   showMessage(message: string, duration = 3000, priority = 0): void {
+    if (!this.enabled) {
+      return;
+    }
     if (priority < this.priority) {
       return;
     }
@@ -163,11 +167,23 @@ export class Tips {
    * 公开暴露的通知方法, 所有地方可调用, 调用时会先暂停闲置消息的循环播放
    */
   notification(message: string, duration = 3000, priority = 3): void {
+    if (!this.enabled) {
+      return;
+    }
     this.idlePlayer?.stop();
     this.showMessage(message, duration, priority);
     setTimeout(() => {
       void this.idlePlayer?.start();
     }, duration + this.transitionTime);
+  }
+
+  disable(): void {
+    this.enabled = false;
+    this.clear();
+  }
+
+  enable(): void {
+    this.enabled = true;
   }
 
   /**

@@ -1,5 +1,6 @@
 import { isArray } from 'tianjie';
 
+import { Chat } from './chat.js';
 import { Events } from './events.js';
 import { GlobalStyle } from './global-style.js';
 import { Menus } from './menus.js';
@@ -31,6 +32,7 @@ export class OhMyLive2D implements Oml2dProperties, Oml2dMethods, Oml2dEvents {
   private stage: Stage;
   private statusBar: StatusBar;
   private tips: Tips;
+  private chat: Chat;
   private menus: Menus;
   private models: Models;
   private pixiApp?: PixiApp;
@@ -48,6 +50,7 @@ export class OhMyLive2D implements Oml2dProperties, Oml2dMethods, Oml2dEvents {
     this.stage = new Stage(this.options, this.events); // 实例化舞台
     this.statusBar = new StatusBar(this.options);
     this.tips = new Tips(this.options, this); // 提示框
+    this.chat = new Chat(this.options, this, this.events, this.tips);
     this.menus = new Menus(this.options, this); // 菜单
     this.models = new Models(this.options, this.events);
     this.modelIndex = getModelIndex();
@@ -115,6 +118,26 @@ export class OhMyLive2D implements Oml2dProperties, Oml2dMethods, Oml2dEvents {
 
   tipsMessage(message: string, duration: number, priority: number) {
     this.tips.notification(message, duration, priority);
+  }
+
+  openChat(): void {
+    this.chat.open();
+  }
+
+  closeChat(): void {
+    this.chat.close();
+  }
+
+  toggleChat(): void {
+    this.chat.toggle();
+  }
+
+  async sendChatMessage(message: string): Promise<void> {
+    await this.chat.sendMessage(message);
+  }
+
+  clearChatHistory(): void {
+    this.chat.clearHistory();
   }
 
   setStageStyle(style: CommonStyleType) {
@@ -185,6 +208,7 @@ export class OhMyLive2D implements Oml2dProperties, Oml2dMethods, Oml2dEvents {
         this.pixiApp?.mount(this.models.model);
         this.menus.reload(this.stage.element!);
         this.tips.reload(this.stage.element!);
+        this.chat.reload(this.stage.element!);
 
         this.models.settingModel();
         this.stage.reloadStyle(this.models.modelSize);
@@ -206,6 +230,8 @@ export class OhMyLive2D implements Oml2dProperties, Oml2dMethods, Oml2dEvents {
    * 随机加载模型
    */
   async loadRandomModel(): Promise<void> {
+    this.closeChat();
+    this.clearChatHistory();
     this.modelIndex = getRandomIndex(this.options.models.length, this.modelIndex);
     this.modelClothesIndex = 0;
 
@@ -219,6 +245,8 @@ export class OhMyLive2D implements Oml2dProperties, Oml2dMethods, Oml2dEvents {
    * 加载下个角色模型
    */
   async loadNextModel(): Promise<void> {
+    this.closeChat();
+    this.clearChatHistory();
     if (++this.modelIndex >= this.options.models.length) {
       this.modelIndex = 0;
     }
@@ -236,6 +264,8 @@ export class OhMyLive2D implements Oml2dProperties, Oml2dMethods, Oml2dEvents {
    */
   async loadModelByIndex(index: number, clothesIndex?: number): Promise<void> {
     if (index >= 0 && index < this.options.models.length) {
+      this.closeChat();
+      this.clearChatHistory();
       this.modelIndex = index;
       this.modelClothesIndex = clothesIndex || 0;
 
@@ -409,6 +439,22 @@ export class OhMyLive2D implements Oml2dProperties, Oml2dMethods, Oml2dEvents {
    */
   onLoad(fn: LoadEventFn): void {
     this.events.add('load', fn);
+  }
+
+  onChatOpen(fn: EventFn): void {
+    this.events.add('chatOpen', fn);
+  }
+
+  onChatClose(fn: EventFn): void {
+    this.events.add('chatClose', fn);
+  }
+
+  onChatReply(fn: EventFn): void {
+    this.events.add('chatReply', fn);
+  }
+
+  onChatError(fn: EventFn): void {
+    this.events.add('chatError', fn);
   }
 
   /**

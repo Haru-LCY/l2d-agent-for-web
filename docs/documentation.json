@@ -3710,7 +3710,7 @@
     },
     {
       "kind": "code",
-      "text": "```html\n<script src=\"https://unpkg.com/oh-my-live2d@latest\"></script>\n<script>\n  OML2D.loadOml2d({\n    models: [\n      {\n        path: 'https://model.oml2d.com/HK416-1-normal/model.json',\n        position: [0, 60],\n        scale: 0.08,\n        stageStyle: {\n          height: 450\n        }\n      }\n    ]\n  });\n</script>\n```"
+      "text": "```html\n<script src=\"https://unpkg.com/oh-my-live2d@latest\"></script>\n<script>\n  OML2D.loadOml2d({\n    models: [\n      {\n        path: 'https://model.hacxy.cn/HK416-1-normal/model.json',\n        position: [0, 60],\n        scale: 0.08,\n        stageStyle: {\n          height: 450\n        }\n      }\n    ]\n  });\n</script>\n```"
     },
     {
       "kind": "text",

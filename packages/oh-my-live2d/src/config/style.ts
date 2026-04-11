@@ -99,6 +99,118 @@ export const generateGlobalStyle = (primaryColor: string): string => {
     color: #fff;
     box-shadow: 0 0 5px #000;
   }
+
+  .oml2d-chat {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% - 48px);
+    width: min(380px, 78vw);
+    min-height: 220px;
+    transform: translateX(-50%);
+    z-index: 10000;
+    border: 2px solid #fff;
+    border-radius: 20px;
+    background: linear-gradient(180deg, rgba(67, 177, 223, 0.98) 0%, rgba(46, 165, 217, 0.98) 100%);
+    box-shadow: 0 10px 24px rgba(60, 142, 188, 0.28);
+    padding: 20px 20px 16px;
+    color: #fff;
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .oml2d-chat::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -12px;
+    width: 22px;
+    height: 22px;
+    transform: translateX(-50%) rotate(45deg);
+    background: rgba(46, 165, 217, 0.98);
+    border-right: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+  }
+
+  .oml2d-chat-display {
+    font-size: 18px;
+    line-height: 1.7;
+    text-align: center;
+    white-space: pre-wrap;
+    word-break: break-word;
+    min-height: 112px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 8px 2px;
+  }
+
+  .oml2d-chat-latest-user {
+    font-size: 12px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.88);
+    padding: 0 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .oml2d-chat-form {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+  }
+
+  .oml2d-chat-input {
+    flex: 1;
+    border: 2px solid rgba(255, 255, 255, 0.88);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.18);
+    color: #fff;
+    min-height: 48px;
+    max-height: 132px;
+    padding: 11px 14px;
+    outline: none;
+    resize: none;
+    line-height: 1.55;
+    overflow-y: auto;
+    box-sizing: border-box;
+  }
+
+  .oml2d-chat-input:focus {
+    border-color: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.18);
+  }
+
+  .oml2d-chat-input::placeholder {
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .oml2d-chat-send {
+    border: none;
+    border-radius: 14px;
+    min-width: 86px;
+    min-height: 48px;
+    padding: 0 18px;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.94);
+    color: ${primaryColor};
+    font-weight: 600;
+    box-shadow: 0 6px 16px rgba(22, 111, 152, 0.22);
+  }
+
+  .oml2d-chat-send:disabled,
+  .oml2d-chat-input:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  .oml2d-chat-status {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.82);
+    min-height: 18px;
+    text-align: center;
+  }
   
   #${ELEMENT_ID.menus} .oml2d-menus-item:not(:last-child) {
     margin-bottom: 10px;

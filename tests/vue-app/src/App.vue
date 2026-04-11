@@ -1,86 +1,43 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
 import Oml2d from './components/Oml2d.vue'
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-      <Oml2d></Oml2d>
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+  <main class="page-shell">
+    <div class="hero-card">
+      <Oml2d />
     </div>
-  </header>
-
-  <RouterView />
+  </main>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+.page-shell {
+  min-height: 100vh;
+  padding: 2rem;
+  background: radial-gradient(circle at top left, rgba(15, 118, 110, 0.22), transparent 36%),
+    radial-gradient(circle at bottom right, rgba(14, 116, 144, 0.18), transparent 28%),
+    linear-gradient(180deg, #f8fafc 0%, #eef6ff 100%);
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+.hero-card {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 2rem;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 32px;
+  background: rgba(241, 245, 249, 0.72);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
 }
 
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+@media (max-width: 960px) {
+  .page-shell {
+    padding: 1rem;
   }
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
+  .hero-card {
+    padding: 1.1rem;
+    border-radius: 24px;
   }
 }
 </style>

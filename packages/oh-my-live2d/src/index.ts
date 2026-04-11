@@ -1,4 +1,5 @@
 import './library/iconfont.js';
+import './library/chat-icon.js';
 import './library/cubism2.js';
 import './library/cubism5.js';
 

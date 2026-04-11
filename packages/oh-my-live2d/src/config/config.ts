@@ -78,6 +78,7 @@ export const DEFAULT_OPTIONS: DefaultOptions = {
         icon: 'icon-rest',
         title: '休息',
         onClick(oml2d): void {
+          oml2d.closeChat();
           oml2d.statusBarOpen(oml2d.options.statusBar?.restMessage); // 展示状态条
           oml2d.clearTips(); // 清除当前提示框内容, 并停止空闲消息播放器
 
@@ -108,11 +109,11 @@ export const DEFAULT_OPTIONS: DefaultOptions = {
         }
       },
       {
-        id: 'About',
-        icon: 'icon-about',
-        title: '关于',
-        onClick(): void {
-          window.open('https://oml2d.com');
+        id: 'Chat',
+        icon: 'icon-chat',
+        title: '聊天',
+        onClick(oml2d): void {
+          oml2d.toggleChat();
         }
       }
     ],
@@ -120,6 +121,16 @@ export const DEFAULT_OPTIONS: DefaultOptions = {
     itemStyle: {},
     mobileStyle: MENUS_DEFAULT_STYLE,
     mobileItemStyle: {}
+  },
+  chat: {
+    disable: false,
+    apiEndpoint: '',
+    headers: {},
+    systemPrompt: '',
+    maxHistory: 6,
+    placeholder: '和我聊聊吧...',
+    greeting: '你好呀，想聊点什么？',
+    sendLabel: '发送'
   },
   initialStatus: 'active'
 };
@@ -130,6 +141,7 @@ export const ELEMENT_ID = {
   canvas: 'oml2d-canvas',
   statusBar: 'oml2d-statusBar',
   tips: 'oml2d-tips',
+  chat: 'oml2d-chat',
   menus: 'oml2d-menus',
   iconSvg: 'oml2d-icon-svg'
 };

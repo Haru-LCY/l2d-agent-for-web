@@ -1,4 +1,4 @@
-import type { Options } from '../index.js';
+import type { ChatHistoryMessage, Options } from '../index.js';
 
 /**
  * 属性可以通过实例对象访问
@@ -197,6 +197,31 @@ export interface Oml2dMethods {
    * @returns
    */
   setModelAnchor: (anchor: { x?: number; y?: number }) => void;
+
+  /**
+   * 打开聊天框
+   */
+  openChat: () => void;
+
+  /**
+   * 关闭聊天框
+   */
+  closeChat: () => void;
+
+  /**
+   * 切换聊天框显示状态
+   */
+  toggleChat: () => void;
+
+  /**
+   * 发送聊天消息
+   */
+  sendChatMessage: (message: string) => Promise<void>;
+
+  /**
+   * 清空聊天历史
+   */
+  clearChatHistory: () => void;
 }
 
 /**
@@ -238,4 +263,24 @@ export interface Oml2dEvents {
    * @returns
    */
   onStageSlideOut: (fn: () => void | Promise<void>) => void;
+
+  /**
+   * 聊天框打开事件
+   */
+  onChatOpen: (fn: () => void | Promise<void>) => void;
+
+  /**
+   * 聊天框关闭事件
+   */
+  onChatClose: (fn: () => void | Promise<void>) => void;
+
+  /**
+   * AI 回复事件
+   */
+  onChatReply: (fn: (reply: string, messages: ChatHistoryMessage[]) => void | Promise<void>) => void;
+
+  /**
+   * 聊天错误事件
+   */
+  onChatError: (fn: (message: string) => void | Promise<void>) => void;
 }

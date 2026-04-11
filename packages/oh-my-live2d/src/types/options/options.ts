@@ -1,3 +1,4 @@
+import type { ChatOptions } from './chat.js';
 import type { MenusOptions } from './menus.js';
 import type { ModelOptions } from './model.js';
 import type { StatusBarOptions } from './statusBar.js';
@@ -92,6 +93,11 @@ export interface Options {
    * 菜单配置, 详见: [菜单选项](./MenusOptions)
    */
   menus?: MenusOptions | ((currentModel: ModelOptions, modelIndex: number) => MenusOptions);
+
+  /**
+   * 聊天配置
+   */
+  chat?: ChatOptions;
 
   /**
    * 为组件提供一个父元素，如果未指定则默认挂载到 body 中

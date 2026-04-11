@@ -4,11 +4,12 @@ import type { HitAreaFrames } from 'pixi-live2d-display/extra';
 import type { Application } from 'pixi.js';
 
 import { CommonStyleType, Item } from './common.js';
-import type { MenusOptions, ModelOptions, Options, StatusBarOptions, TipsOptions } from './options/index.js';
+import type { ChatOptions, MenusOptions, ModelOptions, Options, StatusBarOptions, TipsOptions } from './options/index.js';
 import type { DeepRequired } from './utils.js';
 import type { DEFAULT_OPTIONS } from '../config/config.js';
 
 export * from './options/index.js';
+export * from './common.js';
 export * from './utils.js';
 export type HitAreaFramesType = typeof HitAreaFrames;
 export type ImportType = 'complete' | 'cubism2' | 'cubism5';
@@ -23,11 +24,15 @@ export type ApplicationType = typeof Application;
 
 export type CSSProperties = CSS.Properties;
 
-export type DefaultOptions = Omit<DeepRequired<Options>, 'parentElement' | 'stageStyle' | 'models' | 'tips' | 'statusBar' | 'menus'> & {
+export type DefaultOptions = Omit<
+  DeepRequired<Options>,
+  'parentElement' | 'stageStyle' | 'models' | 'tips' | 'statusBar' | 'menus' | 'chat'
+> & {
   parentElement: HTMLElement;
   tips: DefaultTipsOptions;
   statusBar: DefaultStatusBarOptions;
   menus: DefaultMenusOptions;
+  chat: DefaultChatOptions;
   stageStyle?: CommonStyleType;
   models: ModelOptions[];
 };
@@ -48,6 +53,18 @@ export type DefaultMenusOptions = Omit<DeepRequired<MenusOptions>, 'style' | 'it
   itemStyle?: CommonStyleType;
   mobileStyle?: CommonStyleType;
   mobileItemStyle?: CommonStyleType;
+};
+
+export type DefaultChatOptions = Omit<
+  DeepRequired<ChatOptions>,
+  'apiEndpoint' | 'headers' | 'systemPrompt' | 'placeholder' | 'greeting' | 'sendLabel'
+> & {
+  apiEndpoint?: string;
+  headers?: Record<string, string>;
+  systemPrompt?: string;
+  placeholder?: string;
+  greeting?: string;
+  sendLabel?: string;
 };
 
 export type Live2DModelType = typeof Live2DModel;

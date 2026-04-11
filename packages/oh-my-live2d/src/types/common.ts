@@ -45,6 +45,16 @@ export type LoadOml2dSDK = (
 
 export type StoreModelInfo = (string | string[])[];
 
+export type ChatHistoryMessage = {
+  role: 'user' | 'assistant';
+  content: string;
+};
+
+export type ChatRequestMessage = {
+  role: 'system' | 'user' | 'assistant';
+  content: string;
+};
+
 export type Item = {
   id: string;
   icon: string;

@@ -13,7 +13,7 @@ import { loadOml2d } from 'oh-my-live2d';
 loadOml2d({
   models: [
     {
-      path: 'https://model.oml2d.com/Senko_Normals/senko.model3.json',
+      path: 'https://model.hacxy.cn/Senko_Normals/senko.model3.json',
       position: [-10, 20]
     }
   ]
@@ -29,7 +29,7 @@ loadOml2d({
 
   ```json
   {
-    "path": "https://model.oml2d.com/Senko_Normals/senko.model3.json",
+    "path": "https://model.hacxy.cn/Senko_Normals/senko.model3.json",
     "position": [-10, 20]
   }
   ```
@@ -46,7 +46,7 @@ loadOml2d({
 
   ```json
   {
-    "path": "https://model.oml2d.com/Pio/model.json",
+    "path": "https://model.hacxy.cn/Pio/model.json",
     "scale": 0.4,
     "position": [0, 50],
     "stageStyle": {
@@ -67,7 +67,7 @@ loadOml2d({
 
   ```json
   {
-    "path": "https://model.oml2d.com/shizuku/shizuku.model.json",
+    "path": "https://model.hacxy.cn/shizuku/shizuku.model.json",
     "scale": 0.2,
     "volume": 0,
     "position": [70, 70],
@@ -86,7 +86,7 @@ loadOml2d({
 
   ```json
   {
-    "path": "https://model.oml2d.com/shizuku_pajama/index.json",
+    "path": "https://model.hacxy.cn/shizuku_pajama/index.json",
     "scale": 0.2,
     "volume": 0,
     "position": [40, 10],
@@ -107,7 +107,7 @@ loadOml2d({
 - 配置:
   ```json
   {
-    "path": "https://model.oml2d.com/HK416-1-normal/model.json",
+    "path": "https://model.hacxy.cn/HK416-1-normal/model.json",
     "position": [0, 60],
     "scale": 0.08,
     "stageStyle": {
@@ -125,7 +125,7 @@ loadOml2d({
 - 配置:
   ```json
   {
-    "path": "https://model.oml2d.com/cat-black/model.json",
+    "path": "https://model.hacxy.cn/cat-black/model.json",
     "scale": 0.15,
     "position": [0, 20],
     "stageStyle": {

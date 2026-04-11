@@ -3,12 +3,16 @@ import { loadOml2d } from '../dist/index.js';
 const oml2d = loadOml2d({
   models: [
     {
-      path: 'https://model.oml2d.com/Senko_Normals/senko.model3.json',
+      path: 'https://model.hacxy.cn/HK416-1-normal/model.json',
       showHitAreaFrames: true,
-      position: [-10, 20]
+      position: [0, 60],
+      scale: 0.08,
+      stageStyle: {
+        height: 450
+      }
     },
     {
-      path: 'https://model.oml2d.com/Pio/model.json',
+      path: 'https://model.hacxy.cn/Pio/model.json',
       scale: 0.4,
       position: [0, 50],
       stageStyle: {
