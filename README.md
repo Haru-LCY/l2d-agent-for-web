@@ -2,129 +2,158 @@
 
 基于 `OhMyLive2D` 二次开发的 Web AI 看板娘项目。
 
-目标是做一个可以在网页中常驻展示、与用户进行文字交互、具备基础情绪反馈与动作反馈能力的 Live2D AI 助手。
+当前仓库已经完成这些能力：
 
-## 项目定位
+- 右侧菜单支持 `休息 / 换装 / 换人 / 聊天`
+- 点击聊天按钮后，在看板娘头顶打开蓝色对话气泡
+- 气泡内部可直接输入文本，长内容向上增长，不遮挡角色
+- 支持短上下文会话
+- `tests/vue-app` 已接入本地聊天代理接口 `/api/live2d-chat`
+- 本地开发时可直接转发到 DeepSeek；未配置 key 时会自动回退到 mock
 
-这个仓库当前以 `OhMyLive2D` 的能力为基础，后续会逐步补齐以下能力：
+## 运行
 
-- Live2D 模型加载、切换、位置与舞台控制
-- 文本对话 UI
-- 与大模型 API 的消息收发
-- 看板娘动作、表情、文案联动
-- 基础记忆、配置面板与可嵌入部署能力
+先安装依赖：
 
-## 预期效果
+```bash
+pnpm install
+```
 
-最终希望实现一个这样的产品形态：
+启动完整示例：
 
-- 页面右下角或侧边栏常驻一个 Live2D 看板娘
-- 用户可以点击、悬停、输入文本与其互动
-- 看板娘可以调用 AI 接口进行回复
-- 回复时同步触发对应动作、表情、气泡文案
-- 支持将组件嵌入博客、文档站、产品官网或独立 Web 应用
+```bash
+pnpm test:vue
+```
 
-## 初步技术方向
+启动核心包 demo：
 
-- 前端渲染：`TypeScript` + 当前仓库已有 `OhMyLive2D` 能力
-- 交互层：聊天面板、事件总线、角色状态机
-- AI 接入：兼容 OpenAI 风格接口，后续可扩展多模型提供方
-- 状态联动：将“用户事件 / AI 回复 / 系统事件”映射为模型动作和表情
-- 配置方式：提供统一配置对象，支持本地配置与远程配置
+```bash
+pnpm demo
+```
 
-## 建议的功能拆分
+## DeepSeek 接入
 
-### 1. 基础展示层
+### API Key 放在哪
 
-- 跑通单模型加载和稳定展示
-- 支持位置、缩放、层级、移动端适配
-- 补齐销毁、重建、切换模型等基础生命周期
+把你的 DeepSeek 配置写到：
 
-### 2. 交互层
+`tests/vue-app/.env.local`
 
-- 增加聊天输入框、消息列表、气泡提示
-- 增加点击角色、悬停角色、空闲提示等交互事件
-- 统一事件分发，避免 UI 逻辑和模型逻辑耦合
+你可以先复制模板：
 
-### 3. AI 对话层
+```bash
+cp tests/vue-app/.env.example tests/vue-app/.env.local
+```
 
-- 封装会话请求模块
-- 支持流式输出
-- 支持 system prompt、角色设定、上下文拼接
-- 增加错误重试、超时处理、降级提示
+然后编辑 `tests/vue-app/.env.local`：
 
-### 4. 角色表现层
+```env
+DEEPSEEK_API_KEY=sk-your-deepseek-api-key
+DEEPSEEK_BASE_URL=https://api.deepseek.com
+DEEPSEEK_MODEL=deepseek-chat
+DEEPSEEK_TEMPERATURE=0.7
+```
 
-- 建立“情绪 / 动作 / 表情 / 文案”映射表
-- 根据用户输入意图和 AI 回复类型触发不同反馈
-- 增加空闲动画、思考中状态、回复完成状态
+### 每个变量的作用
 
-### 5. 配置与发布层
+- `DEEPSEEK_API_KEY`
+  DeepSeek 的 API Key，必填。没有它就不会请求真实模型。
+- `DEEPSEEK_BASE_URL`
+  DeepSeek 接口基地址，默认是 `https://api.deepseek.com`
+- `DEEPSEEK_MODEL`
+  使用的模型名，默认 `deepseek-chat`
+- `DEEPSEEK_TEMPERATURE`
+  回复随机度，默认 `0.7`
 
-- 提供易用的初始化配置
-- 支持主题、角色人设、接口地址、模型资源配置
-- 补充 demo、文档和嵌入示例
+### 当前代理是怎么工作的
 
-## 开发计划
+浏览器不会直接拿你的 API Key 请求 DeepSeek。
 
-### Phase 1：仓库整理与基础验证
+当前本地开发流程是：
 
-- 清理原仓库历史，保留可复用代码结构
-- 确认 `oh-my-live2d` 核心包的启动、构建、调试流程
-- 跑通一个最小 demo，验证模型加载与页面挂载
+1. 前端只请求 `POST /api/live2d-chat`
+2. `tests/vue-app/vite.config.ts` 中的本地中间件读取 `.env.local`
+3. 如果检测到 `DEEPSEEK_API_KEY`，就由本地 Vite 服务转发到 DeepSeek
+4. 如果没有检测到 key，就自动返回 mock 回复
 
-### Phase 2：最小可用交互版本
+这样做的好处是：
 
-- 增加聊天面板
-- 接入一个可配置的大模型 API
-- 实现“用户输入 -> AI 回复 -> 页面展示”的完整闭环
+- 前端代码里不暴露 API Key
+- 本地可以直接验证对话效果
+- 后续部署时也可以沿用同样的接口协议
 
-交付标准：
+## 当前聊天接口协议
 
-- 可以在本地页面中和看板娘完成一轮对话
-- 回复内容可以展示在聊天框和角色气泡中
+前端固定请求：
 
-### Phase 3：动作与情绪联动
+```http
+POST /api/live2d-chat
+```
 
-- 为不同类型回复定义动作与表情规则
-- 增加点击反馈、欢迎语、空闲提示
-- 优化角色反馈时机，避免动作和文本脱节
+请求体：
 
-交付标准：
+```json
+{
+  "message": "用户这次输入的内容",
+  "messages": [
+    { "role": "system", "content": "system prompt" },
+    { "role": "user", "content": "历史消息" },
+    { "role": "assistant", "content": "历史回复" }
+  ],
+  "character": "hk416",
+  "page": "当前页面 URL"
+}
+```
 
-- 至少支持 3 到 5 种可区分的角色反馈状态
+响应体：
 
-### Phase 4：配置化与可嵌入
+```json
+{
+  "reply": "AI 回复内容"
+}
+```
 
-- 提供统一初始化入口
-- 抽离角色配置、模型配置、AI 配置
-- 输出适合第三方站点集成的示例
+## 你现在怎么验收 DeepSeek 接入
 
-交付标准：
+1. 配置 `tests/vue-app/.env.local`
+2. 运行 `pnpm test:vue`
+3. 打开终端输出的本地地址
+4. 点击看板娘右侧的聊天按钮
+5. 输入一句话并发送
 
-- 新项目通过简单配置即可接入
+你应该看到：
 
-### Phase 5：体验优化
+- 页面中的“当前提供方”显示 `DeepSeek 代理`
+- 看板娘头顶气泡里出现真实模型回复
+- 页面左侧“最近回复”同步更新
 
-- 增加上下文记忆和基础人设管理
-- 支持流式回复和打字机效果
-- 优化移动端布局、加载速度和异常恢复
+如果没配置 key：
 
-## 当前建议的下一步
+- 页面中的“当前提供方”会显示 `Mock 回退`
+- 聊天仍然能工作，但返回的是演示回复
 
-如果按实际开发顺序推进，建议优先做这 4 件事：
+## 代码位置
 
-1. 先梳理 `packages/oh-my-live2d` 的入口、demo 和模型事件机制。
-2. 做一个最小聊天面板原型，哪怕先用假数据。
-3. 抽一个 `AIProvider` 接口层，避免后面切换模型服务时重写业务逻辑。
-4. 设计一份角色状态机，先定义好“空闲、欢迎、思考、回复、错误”几个状态。
+- 核心聊天 UI：
+  `packages/oh-my-live2d/src/modules/chat.ts`
+- 默认菜单与聊天配置：
+  `packages/oh-my-live2d/src/config/config.ts`
+- 聊天气泡样式：
+  `packages/oh-my-live2d/src/config/style.ts`
+- 本地 DeepSeek 代理：
+  `tests/vue-app/vite.config.ts`
+- 演示页面：
+  `tests/vue-app/src/components/Oml2d.vue`
 
-## 开发备注
+## 说明
 
-- 当前仓库是一个 `monorepo`
-- 核心 Live2D 能力位于 `packages/oh-my-live2d`
-- 后续建议把 AI 交互能力拆成独立模块，避免直接污染底层渲染实现
-- 如果项目目标是“可复用组件”，建议尽早区分“核心引擎”和“演示应用”
+当前仓库里的 DeepSeek 代理只存在于本地开发用的 Vite 中间件里。
+
+如果你之后要部署到自己的个人网站，生产环境也需要提供一个同协议的后端接口，例如：
+
+- `/api/live2d-chat`
+
+由你的服务端去持有 DeepSeek API Key，并转发请求到 DeepSeek。
 
 ## License
 

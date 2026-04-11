@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { loadOml2d, type Oml2dEvents, type Oml2dMethods, type Oml2dProperties } from 'oh-my-live2d'
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref } from 'vue'
 
 type Oml2dInstance = Oml2dProperties & Oml2dMethods & Oml2dEvents
 
 const oml2dRef = ref<HTMLElement>()
-const useMockApi = ref(true)
 const requestState = ref('点击看板娘右侧第四个按钮，打开聊天框。')
 const lastReply = ref('暂无回复')
 const currentEndpoint = ref('/api/live2d-chat')
+const currentProvider = ref(__DEMO_CHAT_MODE__ === 'deepseek' ? 'DeepSeek 代理' : 'Mock 回退')
 
 let oml2d: Oml2dInstance | undefined
 
@@ -18,11 +18,12 @@ const syncApiEndpoint = () => {
   }
 
   oml2d.options.chat ||= {}
-  oml2d.options.chat.apiEndpoint = useMockApi.value ? '/api/live2d-chat' : ''
-  currentEndpoint.value = oml2d.options.chat.apiEndpoint || '未配置'
-  requestState.value = useMockApi.value
-    ? 'Mock API 已开启，可直接体验对话。'
-    : 'Mock API 已关闭，发送时会提示先配置聊天接口。'
+  oml2d.options.chat.apiEndpoint = '/api/live2d-chat'
+  currentEndpoint.value = '/api/live2d-chat'
+  requestState.value =
+    __DEMO_CHAT_MODE__ === 'deepseek'
+      ? '已检测到 DeepSeek API Key，当前请求会走本地代理再转发到 DeepSeek。'
+      : '未检测到 DeepSeek API Key，当前将自动回退到 mock 回复。'
 }
 
 const openChat = () => {
@@ -96,10 +97,6 @@ onMounted(() => {
 
   syncApiEndpoint()
 })
-
-watch(useMockApi, () => {
-  syncApiEndpoint()
-})
 </script>
 
 <template>
@@ -117,6 +114,10 @@ watch(useMockApi, () => {
           <p>{{ requestState }}</p>
         </div>
         <div>
+          <span class="label">当前提供方</span>
+          <p>{{ currentProvider }}</p>
+        </div>
+        <div>
           <span class="label">当前接口</span>
           <p>{{ currentEndpoint }}</p>
         </div>
@@ -126,10 +127,6 @@ watch(useMockApi, () => {
         </div>
       </div>
       <div class="controls">
-        <label class="toggle">
-          <input v-model="useMockApi" type="checkbox" />
-          <span>启用 Mock API</span>
-        </label>
         <button type="button" @click="openChat">打开聊天框</button>
         <button type="button" @click="sendSampleMessage">发送示例消息</button>
       </div>
@@ -177,7 +174,7 @@ h2 {
 .status-grid {
   display: grid;
   gap: 0.9rem;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .status-grid div {
@@ -211,16 +208,6 @@ h2 {
   flex-wrap: wrap;
   gap: 0.9rem;
   align-items: center;
-}
-
-.toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  padding: 0.7rem 0.95rem;
-  border-radius: 999px;
-  background: rgba(8, 145, 178, 0.12);
-  color: #0f172a;
 }
 
 .controls button {
